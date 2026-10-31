@@ -57,9 +57,9 @@ class ApiViewModel @Inject constructor(
                 action()
             } catch (e: Exception) {
                 val apiError = when (e) {
-                    is IOException -> ApiNetworkError.NetworkError("Erro de conexão: ${e.message}")
-                    is HttpException -> ApiNetworkError.ApiError("Erro na API: ${e.message}")
-                    else -> ApiNetworkError.UnknownError("Erro desconhecido: ${e.message}")
+                    is IOException -> ApiNetworkError.NetworkError("Unable to connect. Check your connection and API configuration.")
+                    is HttpException -> ApiNetworkError.ApiError("The movie service returned an error (HTTP ${e.code()}).")
+                    else -> ApiNetworkError.UnknownError("Unable to load movies. Please try again.")
                 }
                 _uiState.update { it.copy(error = apiError) }
             } finally {
