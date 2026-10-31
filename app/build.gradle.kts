@@ -1,9 +1,25 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.devtools.ksp)
     alias(libs.plugins.dagger.hilt.android)
+}
+
+val localProperties = Properties().apply {
+    val propertiesFile = rootProject.file("local.properties")
+    if (propertiesFile.isFile) {
+        propertiesFile.inputStream().use { load(it) }
+    }
+}
+val tmdbApiKey = providers.environmentVariable("TMDB_API_KEY").orNull
+    ?.trim()?.takeIf { it.isNotEmpty() }
+    ?: localProperties.getProperty("TMDB_API_KEY", "").trim()
+
+require(tmdbApiKey.isEmpty() || tmdbApiKey.matches(Regex("[A-Za-z0-9_-]+"))) {
+    "TMDB_API_KEY contains unsupported characters. Use your TMDB v3 API key."
 }
 
 android {
@@ -22,7 +38,7 @@ android {
         buildConfigField(
             "String",
             "API_KEY",
-            "apiKey"
+            "\"$tmdbApiKey\""
         )
     }
 
