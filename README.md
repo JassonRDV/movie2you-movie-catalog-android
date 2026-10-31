@@ -63,4 +63,4 @@ Several API methods currently include a fixed release-date range in their defaul
 
 ## Contact
 
-[Jasson Ramos on LinkedIn](https://www.linkedin.com/in/jasson-ramos-66b897340/)
+[Jasson Ramos on LinkedIn](https://www.linkedin.com/in/jassonramos/)
