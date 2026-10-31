@@ -32,17 +32,18 @@ Kotlin, Jetpack Compose, Material 3, Navigation Compose, ViewModel, coroutines, 
 
 ### TMDB API key
 
-The request interceptor reads `BuildConfig.API_KEY`. In your local copy of [app/build.gradle.kts](app/build.gradle.kts), replace the placeholder `buildConfigField` value with a quoted string containing your own TMDB API key:
+Supply your TMDB v3 API key through either:
 
-```kotlin
-buildConfigField(
-    "String",
-    "API_KEY",
-    "\"YOUR_TMDB_API_KEY\""
-)
-```
+- A `TMDB_API_KEY` environment variable (preferred for CI).
+- `TMDB_API_KEY=YOUR_TMDB_API_KEY` in the root `local.properties` file, which Git ignores.
 
-Keep your real key out of commits. The current build script uses this field directly; it does not automatically read a key from `local.properties`.
+A nonempty environment variable takes priority. Never put a real key in the build script or commit local configuration. With no key configured, the app refuses authenticated requests without sending them.
+
+The network client does not log request URLs, headers, or response bodies. User-facing errors do not include raw exception messages.
+
+**Android limitation:** build-time configuration keeps the key out of Git, but the resulting key is still included in the APK and can be extracted. A distributed app that must keep a shared credential secret needs a backend that holds the credential and enforces authentication and rate limits. This repository remains a direct-to-TMDB demonstration app.
+
+If a real key was ever published in Git, logs, or a distributed APK, revoke or rotate it in TMDB; editing a file cannot invalidate that credential.
 
 To request a debug build on Windows:
 
